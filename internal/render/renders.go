@@ -8,8 +8,9 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/jfk23/gobookings/pkg/config"
-	"github.com/jfk23/gobookings/pkg/model"
+	"github.com/jfk23/gobookings/internal/config"
+	"github.com/jfk23/gobookings/internal/model"
+	"github.com/justinas/nosurf"
 )
 
 var app *config.AppConfig
@@ -18,12 +19,13 @@ func LoadTemplate(a *config.AppConfig) {
 	app = a
 }
 
-func ApplyTemplateData(t *model.TemplateData) *model.TemplateData {
+func ApplyTemplateData(t *model.TemplateData, r *http.Request, rw http.ResponseWriter) *model.TemplateData {
+	t.CSRFToken = nosurf.Token(r)
 	return t
 }
 
 //RenderTemplate is rendering.
-func RenderTemplate(rw http.ResponseWriter, tmpl string, tempData *model.TemplateData) {
+func RenderTemplate(rw http.ResponseWriter, hr *http.Request, tmpl string, tempData *model.TemplateData) {
 
 	var appcache map[string]*template.Template
 
@@ -42,7 +44,7 @@ func RenderTemplate(rw http.ResponseWriter, tmpl string, tempData *model.Templat
 
 		//buf := new(bytes.Buffer)
 
-		tempData = ApplyTemplateData(tempData)
+		tempData = ApplyTemplateData(tempData, hr, rw)
 
 		e := r.Execute(rw, tempData)
 		//fmt.Println(buf.Len())

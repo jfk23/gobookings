@@ -154,6 +154,7 @@
       
 
       let textData = document.getElementById("myParagraph");
+      
       let htmlData = `
       <form id = "make-reservation-forms" action="" method="POST" novalidate class="needs-validation">
         <div class="form-row">               
@@ -296,6 +297,7 @@
 
           if (formValues) {
             Swal.fire(JSON.stringify(formValues))
+            // if (formValues.dismiss !== Swal.DismissReason.cancel){}
           }
 
         }
