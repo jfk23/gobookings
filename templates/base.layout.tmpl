@@ -42,11 +42,16 @@
         </div>
       </li>
       <li class="nav-item">
+<<<<<<< HEAD
         <a class="nav-link" href="/search">Book Now</a>
+=======
+        <a class="nav-link" href="/make-reservation">Book Now</a>
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/contact">Contact</a>
       </li>
+<<<<<<< HEAD
        {{ if eq .IsAuthenticated 1}}
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,6 +67,8 @@
         <a class="nav-link" href="/user/login">Login</a>
         {{end}}
       </li>
+=======
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
       
     </ul>
   </div>
@@ -96,7 +103,10 @@
         <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker-full.min.js"></script>
         <script src="https://unpkg.com/notie"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<<<<<<< HEAD
         
+=======
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 
   
 
@@ -107,6 +117,7 @@
 
     <script>
       let attention = Prompt();
+<<<<<<< HEAD
 
       function Prompt() {
     
@@ -257,6 +268,9 @@
       showAlert("{{.}}", "warning");
       
       {{end}}
+=======
+      
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
       
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (function () {
@@ -302,6 +316,127 @@
       
       `;
 
+<<<<<<< HEAD
+=======
+      
+
+      
+
+  
+
+      function Prompt() {
+        let toast = function(c) {
+            const {
+              title = "",
+              position = 'top-end',
+              icon = 'success'
+
+            } = c;
+            const Toast = Swal.mixin({
+            icon : icon,
+            title: title,
+            toast: true,
+            position: position,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({})
+
+
+        }
+        let success = function(c) {
+          const {
+            title="",
+            text="",
+            footer="",
+            icon="success"
+          } = c ;
+
+          Swal.fire({
+          icon: icon,
+          title: title,
+          text: text,
+          footer: footer,
+        })
+
+        }
+
+        let error = function(c) {
+          const {
+            title="",
+            text="",
+            footer="",
+            icon="error"
+          } = c ;
+
+          Swal.fire({
+          icon: icon,
+          title: title,
+          text: text,
+          footer: footer,
+        })
+
+        }
+
+        let custom = async function(c) {
+          const {
+            title="",
+            html="",
+
+          } = c;
+
+          const { value: formValues } = await Swal.fire({
+            title: title,
+            html: html,
+            focusConfirm: false,
+            showCancelButton: true,
+            willOpen: () => {
+              if(c.willOpen !== undefined) {
+                c.willOpen();
+              }
+              },
+
+            didOpen: () => {
+              if(c.didOpen !== undefined) {
+                c.didOpen();
+              }
+            },
+            preConfirm: () => {
+              return [
+                document.getElementById('popup-start-date').value,
+                document.getElementById('popup-end-date').value
+              ]
+            }
+          })
+
+          if (formValues) {
+            if (formValues.value !== "") {
+              if (c.callback !== undefined)  {
+                return c.callback(formValues);
+              } 
+            } else {
+              return c.callback(false);
+            }
+          }
+
+        }
+
+
+
+        return {
+          toast : toast,
+          success : success,
+          error : error,
+          custom: custom,
+        }
+      }
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 
       
 

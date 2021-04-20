@@ -23,6 +23,7 @@ func Routes(app *config.AppConfig) http.Handler {
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/generals-room", handlers.Repo.Generals)
 	mux.Get("/majors-room", handlers.Repo.Majors)
+<<<<<<< HEAD
 	mux.Get("/choose-room/{id}", handlers.Repo.ChooseRoom)
 	mux.Get("/book-room/", handlers.Repo.BookRoom)
 
@@ -30,15 +31,21 @@ func Routes(app *config.AppConfig) http.Handler {
 	mux.Post("/make-reservation", handlers.Repo.PostReservation)
 	mux.Get("/reservation-summary", handlers.Repo.ReservationSummary)
 	
+=======
+	mux.Get("/make-reservation", handlers.Repo.Reservation)
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 	mux.Get("/contact", handlers.Repo.Contact)
 	mux.Get("/search", handlers.Repo.Search)
 	mux.Post("/search", handlers.Repo.PostSearch)
 	mux.Post("/search-json", handlers.Repo.PostSearchJson)
+<<<<<<< HEAD
 
 	mux.Get("/user/login", handlers.Repo.ShowLogin)
 	mux.Post("/user/login", handlers.Repo.PostShowLogin)
 
 	mux.Get("/user/logout", handlers.Repo.ShowLogout)
+=======
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))

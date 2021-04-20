@@ -10,11 +10,16 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+<<<<<<< HEAD
 	"github.com/jfk23/gobookings/cmd/web/helpers"
 	"github.com/jfk23/gobookings/driver"
 	"github.com/jfk23/gobookings/internal/config"
 	"github.com/jfk23/gobookings/internal/handlers"
 	"github.com/jfk23/gobookings/internal/model"
+=======
+	"github.com/jfk23/gobookings/internal/config"
+	"github.com/jfk23/gobookings/internal/handlers"
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 	"github.com/jfk23/gobookings/internal/render"
 )
 

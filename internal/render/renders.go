@@ -3,13 +3,10 @@ package render
 import (
 	// "bytes"
 	// "fmt"
-	"errors"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
-	"time"
 
 	"github.com/jfk23/gobookings/internal/config"
 	"github.com/jfk23/gobookings/internal/model"
@@ -18,25 +15,17 @@ import (
 
 var app *config.AppConfig
 
-func NewRenderer(a *config.AppConfig) {
+func LoadTemplate(a *config.AppConfig) {
 	app = a
 }
 
-func ApplyTemplateData(t *model.TemplateData, r *http.Request) *model.TemplateData {
+func ApplyTemplateData(t *model.TemplateData, r *http.Request, rw http.ResponseWriter) *model.TemplateData {
 	t.CSRFToken = nosurf.Token(r)
-	t.FlashMsg = app.Session.PopString(r.Context(), "flash")
-	t.ErrorMsg = app.Session.PopString(r.Context(), "error")
-	t.WarningMsg = app.Session.PopString(r.Context(), "warning")
-
-	if app.Session.Exists(r.Context(), "user_id") {
-		t.IsAuthenticated = 1
-	}
-	
 	return t
 }
 
-//Template is rendering.
-func Template(rw http.ResponseWriter, hr *http.Request, tmpl string, tempData *model.TemplateData) error {
+//RenderTemplate is rendering.
+func RenderTemplate(rw http.ResponseWriter, hr *http.Request, tmpl string, tempData *model.TemplateData) {
 
 	var appcache map[string]*template.Template
 
@@ -50,63 +39,33 @@ func Template(rw http.ResponseWriter, hr *http.Request, tmpl string, tempData *m
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
-	r, ok := appcache[tmpl]
-	if !ok {
-		return errors.New("no matching Templates")
-	} 
-	
 
-	//buf := new(bytes.Buffer)
+	if r, ok := appcache[tmpl]; ok {
 
-	tempData = ApplyTemplateData(tempData, hr)
+		//buf := new(bytes.Buffer)
 
-	e := r.Execute(rw, tempData)
-	//fmt.Println(buf.Len())
-	
-	if e != nil {
-		log.Fatal(e)
-		return e
+		tempData = ApplyTemplateData(tempData, hr, rw)
+
+		e := r.Execute(rw, tempData)
+		//fmt.Println(buf.Len())
+		
+		if e != nil {
+			log.Fatal(e)
+		}
+		// _, e = buf.WriteTo(rw)
+		// if e != nil {
+		// 	fmt.Println("There is error in writing template to buffer.")
+		// }
+
 	}
-	// _, e = buf.WriteTo(rw)
-	// if e != nil {
-	// 	fmt.Println("There is error in writing template to buffer.")
-	// }
-
-	
-	return nil
 }
 
-var funcmap = template.FuncMap{
-	"humanTime" : HumanTime,
-	"formatTime" : FormatTime,
-	"iterate" : Iterate,
-}
-
-func Iterate (count int) []int {
-	var i []int
-	var m int
-	for m = 1; m <= count; m++ {
-		i = append(i, m)
-	}
-	
-	return i
-}
-
-func HumanTime (t time.Time) string{
-	return t.Format("2006-01-02")
-}
-
-func FormatTime (t time.Time, f string) string {
-	return t.Format(f)
-}
-
-var pathToTemplate = "./templates"
+var funcmap template.FuncMap
 
 func CreateTemplate() (map[string]*template.Template, error) {
-	
 	cached := map[string]*template.Template{}
 
-	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.html", pathToTemplate))
+	pages, err := filepath.Glob("./templates/*.page.html")
 	if err != nil {
 		return cached, err
 	}
@@ -121,14 +80,14 @@ func CreateTemplate() (map[string]*template.Template, error) {
 			return cached, err
 		}
 
-		matches, err := filepath.Glob(fmt.Sprintf("%s/*.layout.tmpl", pathToTemplate))
+		matches, err := filepath.Glob("./templates/*.layout.tmpl")
 
 		if err != nil {
 			return cached, err
 		}
 
 		if len(matches) > 0 {
-			ts, err = ts.ParseGlob(fmt.Sprintf("%s/*.layout.tmpl", pathToTemplate))
+			ts, err = ts.ParseGlob("./templates/*.layout.tmpl")
 			if err != nil {
 				return cached, err
 			}

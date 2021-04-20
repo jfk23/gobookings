@@ -55,6 +55,7 @@
 <script>
 
 
+<<<<<<< HEAD
 // GetBookingResponse(1)
 var roomid = "1"
 
@@ -111,6 +112,43 @@ document.getElementById("check-availability-button").addEventListener("click", f
         });
 
 </script>
+=======
+      document.getElementById("check-availability-button").addEventListener("click", function(){
+        
+      attention.custom(
+        {title:"Choose your dates", 
+        html:htmlData,
+        willOpen: () => {
+              const elem = document.getElementById('reservation-dates-popup');
+              const rangepicker = new DateRangePicker(elem, {
+                 // ...options
+                })
+              },
+        didOpen: () => {
+        document.getElementById('popup-start-date').removeAttribute('disabled');
+        document.getElementById('popup-end-date').removeAttribute('disabled');
+        },
+        callback: function(formValues) {
+            let form = document.getElementById("make-reservation-forms");
+            console.log(form)
+            let formdata = new FormData(form);
+            console.log(formValues);
+            
+            formdata.append("csrf_token", "{{.CSRFToken}}");
+            console.log(formdata);
+
+            console.log("called")
+            fetch("/search-json", {method: "post", body: formdata,}).then((response)=> response.json()).then((data)=>{
+                console.log(data)
+                console.log(data.message)
+            })
+        }
+    });
+
+      });
+
+    </script>
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 
 
 {{end}}

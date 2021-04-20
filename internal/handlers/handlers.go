@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+<<<<<<< HEAD
 	"errors"
 	"fmt"
 	"log"
@@ -40,6 +41,26 @@ func CreateNewTestRepo(a *config.AppConfig) *Repository {
 	return &Repository{
 		ConfigSetting: a,
 		DB:            dbrepo.NewtestingDBRepo(a),
+=======
+	"fmt"
+	"net/http"
+
+	"github.com/jfk23/gobookings/internal/config"
+	"github.com/jfk23/gobookings/internal/model"
+	"github.com/jfk23/gobookings/internal/render"
+
+)
+
+var Repo *Repository
+
+type Repository struct {
+	ConfigSetting *config.AppConfig
+}
+
+func CreateNewRepo(a *config.AppConfig) *Repository {
+	return &Repository{
+		ConfigSetting: a,
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 	}
 }
 
@@ -50,6 +71,7 @@ func SetHandler(r *Repository) {
 //Home is page for /
 func (re *Repository) Home(rw http.ResponseWriter, r *http.Request) {
 
+<<<<<<< HEAD
 	render.Template(rw, r, "home.page.html", &model.TemplateData{})
 
 }
@@ -333,11 +355,41 @@ func (re *Repository) Contact(rw http.ResponseWriter, r *http.Request) {
 
 func (re *Repository) Search(rw http.ResponseWriter, r *http.Request) {
 	render.Template(rw, r, "search.page.html", &model.TemplateData{})
+=======
+	render.RenderTemplate(rw, r, "home.page.html", &model.TemplateData{})
+
+	remoteIP := r.RemoteAddr
+
+	re.ConfigSetting.Session.Put(r.Context(), "remote_ip", remoteIP)
+
+}
+
+func (re *Repository) Reservation(rw http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(rw, r, "search.page.html", &model.TemplateData{})
+}
+
+func (re *Repository) Generals(rw http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(rw, r, "generals.page.html", &model.TemplateData{})
+}
+
+func (re *Repository) Majors(rw http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(rw, r, "majors.page.html", &model.TemplateData{})
+}
+
+func (re *Repository) Contact(rw http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(rw, r, "contact.page.html", &model.TemplateData{})
+}
+
+func (re *Repository) Search(rw http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(rw, r, "search.page.html", &model.TemplateData{
+	})
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 }
 
 func (re *Repository) PostSearch(rw http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
+<<<<<<< HEAD
 	fmt.Println("this is raw start and end date: ", start, end)
 
 	layout := "01/02/2006"
@@ -380,10 +432,14 @@ func (re *Repository) PostSearch(rw http.ResponseWriter, r *http.Request) {
 	})
 
 	// rw.Write([]byte(fmt.Sprintf("start dat is %s, and end date is %s", start, end)))
+=======
+	rw.Write([]byte(fmt.Sprintf("start dat is %s, and end date is %s", start, end)))
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 
 }
 
 type responseJson struct {
+<<<<<<< HEAD
 	OK        bool   `json:"ok"`
 	Message   string `json:"message"`
 	StartDate string `json:"start_date"`
@@ -432,10 +488,22 @@ func (re *Repository) PostSearchJson(rw http.ResponseWriter, r *http.Request) {
 		Message:   "",
 		StartDate: sd,
 		EndDate:   ed,
+=======
+	OK bool `json:"ok"`
+	Message string `json:"message"`
+
+}
+
+func (re *Repository) PostSearchJson(rw http.ResponseWriter, r *http.Request) {
+	var resp = responseJson {
+		OK : true,
+		Message: "hi there",
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 	}
 
 	out, err := json.MarshalIndent(resp, " ", "    ")
 
+<<<<<<< HEAD
 	// this should work!
 	if err != nil {
 		helpers.SeverError(rw, err)
@@ -857,5 +925,27 @@ func (re *Repository) AdminPostReservationsCalendar(rw http.ResponseWriter, r *h
 
 	re.ConfigSetting.Session.Put(r.Context(), "flash", "successfully updated")
 	http.Redirect(rw, r, fmt.Sprintf("/admin/reservations-calendar?y=%d&m=%d", year, month), http.StatusSeeOther)
+=======
+	if err !=nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(string(out))
+
+	rw.Header().Add("Content-Type", "application/json")
+	rw.Write(out)
+	
+}
+
+
+// About is page for /
+func (re *Repository) About(rw http.ResponseWriter, r *http.Request) {
+	remoteIP := re.ConfigSetting.Session.GetString(r.Context(), "remote_ip")
+
+	var stringData = map[string]string{"test": "Hello Good day!", "remote_ip": remoteIP}
+	render.RenderTemplate(rw, r, "about.page.html", &model.TemplateData{
+		StringMap: stringData,
+	})
+>>>>>>> f9d80378920daa59ece0b025d455d909b50d8551
 
 }
